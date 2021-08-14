@@ -1,17 +1,27 @@
-import { GenericCommand, CommandResponse } from "./Command"
-import { CommandType } from "../Commands"
-import { CommandBusMiddleware } from "../middlewares/Middleware"
+import { BaseCommand, CommandResponse } from "./Command";
+import { CommandBusMiddleware } from "../middlewares/Middleware";
+import { CommandName } from "../Commands";
 
 export class CommandBusDispatcher implements CommandBusMiddleware {
-    handlers : Map<CommandType, (command:GenericCommand) => CommandResponse> = new Map()
-    then (middleware: CommandBusMiddleware) { throw new Error ("The CommandBusDispatcher should be the last middleware") }
-    add (handler:(command:GenericCommand) => CommandResponse) {
-        return { toHandleCommand : (commandType:CommandType) => this.handlers.set(commandType, handler) }
-    }
-    dispatch (command: GenericCommand) {
-        // find all the handler for this command
-        const handler = this.handlers.get(command.type)
-        if (!handler) throw new Error("Cannot find any handler for this command :" + command.type)
-        return handler(command)
-    }
+  handlers: Map<CommandName, (command: any) => CommandResponse> = new Map();
+  then(middleware: CommandBusMiddleware) {
+    throw new Error("The CommandBusDispatcher should be the last middleware");
+  }
+  addUseCase<P extends BaseCommand>(handler: (command: P) => CommandResponse) {
+    return {
+      toHandleCommand: (commandType: CommandName) => {
+        this.handlers.set(commandType, handler);
+        return this;
+      },
+    };
+  }
+  dispatch(command: BaseCommand) {
+    // find all the handler for this command
+    const handler = this.handlers.get(command.type);
+    if (!handler)
+      throw new Error(
+        "Cannot find any handler for this command :" + command.type
+      );
+    return handler(command);
+  }
 }
