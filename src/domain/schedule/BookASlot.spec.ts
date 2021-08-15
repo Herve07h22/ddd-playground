@@ -5,6 +5,9 @@ import { LoggerMiddleware } from "../commands/middlewares/LoggerMiddleware";
 import { TransactionManager } from "../commands/middlewares/TransactionManager";
 import { AuthenticationMiddleware } from "../commands/middlewares/AuthenticationMiddleware";
 import { MemoryUserRepository } from "../authentication/MemoryUserRepository";
+import { EventBusDispatcher } from "../commands/commandBus/EventBusDispatcher";
+import { SendBookingConfirmations } from "./SendBookingConfirmations";
+import { FakeEmailService } from "./FakeEmailService";
 
 class MemoryScheduleRepository implements MemoryScheduleRepository {}
 
@@ -44,6 +47,7 @@ it("It's easy to register some middlewares to the command bus", () => {
   // Fake repositories
   const sheduleNotebook = new MemoryScheduleRepository();
   const userRepository = new MemoryUserRepository();
+  const emailService = new FakeEmailService()
 
   // The command Bus dispatcher is the middleware that handles the incoming commands
   const commandBusDispatcher = new CommandBusDispatcher();
@@ -52,9 +56,14 @@ it("It's easy to register some middlewares to the command bus", () => {
     .addUseCase(BookASlotHandler(sheduleNotebook))
     .toHandleCommand("Book a slot");
 
+  // The event bus diasptacher is the middleware that handle the domain events
+  const eventBusDispatcher = new EventBusDispatcher()
+  eventBusDispatcher.addHandler(SendBookingConfirmations(emailService, userRepository)).toHandleEvent("Slot booked")
+
   // It's easy to add more middlewares to the bus
   const commandBus = new CommandBus()
     .addMiddleware(commandBusDispatcher)
+    .addMiddleware(eventBusDispatcher)
     .addMiddleware(new LoggerMiddleware())
     .addMiddleware(new AuthenticationMiddleware(userRepository))
     .addMiddleware(new TransactionManager());

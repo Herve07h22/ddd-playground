@@ -10,7 +10,6 @@ export class AuthenticationMiddleware
     super();
   }
   dispatch(command: BaseCommand) {
-    console.log("[Authentication]");
     if (this._next) {
       if (command.token) {
         const token = command.token;

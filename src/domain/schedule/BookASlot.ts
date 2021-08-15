@@ -3,6 +3,7 @@ import {
   makeCommandResponse,
   NamedAuthenticatedCommand,
 } from "../commands/commandBus/Command";
+import { SlotBooked } from "./SendBookingConfirmations";
 import { SheduleRepository } from "./SheduleRepository";
 
 export type BookASlotCommand = NamedAuthenticatedCommand<
@@ -24,5 +25,13 @@ export const BookASlotHandler: CommandHandler<BookASlotCommand> =
       );
     }
     console.log("I do the stuff");
-    return makeCommandResponse.withValue("Tout va bien");
+    const event : SlotBooked = {
+      type: "Slot booked",
+      payload: {
+        slot: new Date("2021-01-01"),
+        doctor: "Dr Frankenstein",
+        user:command.user
+      },
+    };
+    return makeCommandResponse.withValue("Tout va bien", event);
   };

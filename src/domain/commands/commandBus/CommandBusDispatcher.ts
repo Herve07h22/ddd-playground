@@ -16,7 +16,7 @@ export class CommandBusDispatcher implements CommandBusMiddleware {
     };
   }
   dispatch(command: BaseCommand) {
-    // find all the handler for this command
+    // find the (unique) handler for this command. 1 command => 1 handler
     const handler = this.handlers.get(command.type);
     if (!handler)
       throw new Error(
