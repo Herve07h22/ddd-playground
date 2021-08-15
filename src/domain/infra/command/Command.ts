@@ -1,4 +1,4 @@
-import { User } from "../../authentication/User";
+import { User } from "../../authentication/entities/User";
 import { CommandName } from "../Commands";
 import { BaseEvent } from "../events/Event";
 
@@ -6,17 +6,17 @@ export type CommandResponse = {
   status: "ok" | "error";
   value?: any;
   error?: string;
-  events?: BaseEvent[]
+  events?: BaseEvent[];
 };
 
 export const makeCommandResponse = {
-  withValue: (value: any, ...events:BaseEvent[]) => {
+  withValue: (value: any, ...events: BaseEvent[]) => {
     const r: CommandResponse = { status: "ok", value, error: "", events };
     return r;
   },
   withError: (error: string) =>
-    ({ status: "error", error, value: "", events:[] } as CommandResponse),
-  withNoValue: (...events:BaseEvent[]) =>
+    ({ status: "error", error, value: "", events: [] } as CommandResponse),
+  withNoValue: (...events: BaseEvent[]) =>
     ({ status: "ok", value: "", error: "", events } as CommandResponse),
 };
 

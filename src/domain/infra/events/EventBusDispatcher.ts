@@ -1,7 +1,11 @@
-import { BaseCommand, CommandResponse, makeCommandResponse } from "./Command";
+import {
+  BaseCommand,
+  CommandResponse,
+  makeCommandResponse,
+} from "../command/Command";
 import { CommandBusMiddleware, Middleware } from "../middlewares/Middleware";
 import { EventName } from "../Events";
-import { BaseEvent } from "../events/Event";
+import { BaseEvent } from "./Event";
 
 export class EventBusDispatcher
   extends Middleware

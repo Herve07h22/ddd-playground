@@ -1,5 +1,5 @@
-import { UserRepository } from "../../authentication/UserRepository";
-import { BaseCommand, makeCommandResponse } from "../commandBus/Command";
+import { UserRepository } from "../../authentication/repository/UserRepository";
+import { BaseCommand, makeCommandResponse } from "../command/Command";
 import { CommandBusMiddleware, Middleware } from "./Middleware";
 
 export class AuthenticationMiddleware

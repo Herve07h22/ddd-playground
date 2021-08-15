@@ -1,4 +1,4 @@
-import { BaseCommand, makeCommandResponse } from "../commandBus/Command";
+import { BaseCommand, makeCommandResponse } from "../command/Command";
 import { CommandBusMiddleware, Middleware } from "./Middleware";
 
 export enum LoggingLevel {

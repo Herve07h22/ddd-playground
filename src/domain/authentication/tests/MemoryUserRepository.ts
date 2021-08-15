@@ -1,5 +1,5 @@
-import { User } from "./User";
-import { UserRepository } from "./UserRepository";
+import { User } from "../entities/User";
+import { UserRepository } from "../repository/UserRepository";
 
 export class MemoryUserRepository implements UserRepository {
   getUserByToken(token: string) {

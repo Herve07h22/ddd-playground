@@ -1,4 +1,4 @@
-import { BaseCommand, CommandResponse } from "../commandBus/Command";
+import { BaseCommand, CommandResponse } from "../command/Command";
 
 export interface CommandBusMiddleware {
   then: (next: CommandBusMiddleware) => void;
